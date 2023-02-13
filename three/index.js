@@ -1,20 +1,16 @@
-function canSum(targetSum, numbers) {
+function canSum(targetSum, numbers, obj = {}) {
   if (targetSum === 0) return true
   if (targetSum < 0) return false
+  if (targetSum in obj) return obj[targetSum]
 
   const results = []
-  numbers = Array.from(new Set(numbers)).sort((a, b) => {
-    let res = 0
-    if (a > b) res = 1
-    if (a < b) res = -1
-    return res
-  })
+  numbers = Array.from(new Set(numbers))
 
-  numbers.forEach(number => {
-    results.push(canSum(targetSum - number, numbers))
-  })
+  numbers.forEach(number => results.push(
+    canSum(targetSum - number, numbers, obj)
+  ))
 
-  return results.some(result => result)
+  return obj[targetSum] = results.some(result => result)
 }
 
 console.log(
@@ -27,4 +23,8 @@ console.log(
 
 console.log(
   canSum(7, [2, 4]) // false
+)
+
+console.log(
+  canSum(1000, [2]) // true
 )
